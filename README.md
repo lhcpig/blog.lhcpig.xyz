@@ -1,1 +1,1 @@
-# 博客网址：[blog.lhcpig.xyz](http://blog.lhcpig.xyz)
+# 博客网址：[blog.lhcpig.com](http://blog.lhcpig.com)
