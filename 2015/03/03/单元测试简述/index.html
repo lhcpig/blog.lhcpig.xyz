@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>单元测试简述 | lhcpig&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="最开始项目中是没有单元测试的，基本都是自己通过各种方式来实现测试的。比如修改代码，测完再改回来；再比如直接模拟用户操作，直接当黑盒测试，然后自己去看相应的逻辑有没有，状态有没有改变。
+
+这些方式有几个缺点:
+
+测试不完整，挖有一些隐藏的坑
+改代码测试，在该回来的时候可能引入新bug
+手工测试比较耗时
+下次改需求时，需要再次手工测试
+
+
+这个里面多次手工测试比较难受，太浪费时间了。以前由于一个逻辑牵">
+<meta property="og:type" content="article">
+<meta property="og:title" content="单元测试简述">
+<meta property="og:url" content="http://blog.lhcpig.xyz/2015/03/03/单元测试简述/index.html">
+<meta property="og:site_name" content="lhcpig's blog">
+<meta property="og:description" content="最开始项目中是没有单元测试的，基本都是自己通过各种方式来实现测试的。比如修改代码，测完再改回来；再比如直接模拟用户操作，直接当黑盒测试，然后自己去看相应的逻辑有没有，状态有没有改变。
+
+这些方式有几个缺点:
+
+测试不完整，挖有一些隐藏的坑
+改代码测试，在该回来的时候可能引入新bug
+手工测试比较耗时
+下次改需求时，需要再次手工测试
+
+
+这个里面多次手工测试比较难受，太浪费时间了。以前由于一个逻辑牵">
+<meta property="og:updated_time" content="2016-02-18T07:10:33.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="单元测试简述">
+<meta name="twitter:description" content="最开始项目中是没有单元测试的，基本都是自己通过各种方式来实现测试的。比如修改代码，测完再改回来；再比如直接模拟用户操作，直接当黑盒测试，然后自己去看相应的逻辑有没有，状态有没有改变。
+
+这些方式有几个缺点:
+
+测试不完整，挖有一些隐藏的坑
+改代码测试，在该回来的时候可能引入新bug
+手工测试比较耗时
+下次改需求时，需要再次手工测试
+
+
+这个里面多次手工测试比较难受，太浪费时间了。以前由于一个逻辑牵">
+  
+    <link rel="alternative" href="/atom.xml" title="lhcpig&#39;s blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?88a82bb48053bb24c969058d27392b67";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">lhcpig&#39;s blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">lhcpig&#39;s blog</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="blog.lhcpig.xyz">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-单元测试简述" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/03/单元测试简述/" class="article-date">
+  <time datetime="2015-03-03T03:51:00.000Z" itemprop="datePublished">2015-03-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      单元测试简述
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+	    
+          <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mockito"><span class="toc-number">1.</span> <span class="toc-text">Mockito</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Mock"><span class="toc-number">1.1.</span> <span class="toc-text">Mock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spy"><span class="toc-number">1.2.</span> <span class="toc-text">Spy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Annotation"><span class="toc-number">1.3.</span> <span class="toc-text">Annotation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Verify"><span class="toc-number">1.4.</span> <span class="toc-text">Verify</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PowerMock"><span class="toc-number">2.</span> <span class="toc-text">PowerMock</span></a></li></ol>
+          </div>
+		
+		<p>最开始项目中是没有单元测试的，基本都是自己通过各种方式来实现测试的。比如修改代码，测完再改回来；再比如直接模拟用户操作，直接当黑盒测试，然后自己去看相应的逻辑有没有，状态有没有改变。</p>
+<blockquote>
+<p><strong>这些方式有几个缺点:</strong></p>
+<ul>
+<li>测试不完整，挖有一些隐藏的坑</li>
+<li>改代码测试，在该回来的时候可能引入新bug</li>
+<li>手工测试比较耗时</li>
+<li>下次改需求时，需要再次手工测试</li>
+</ul>
+</blockquote>
+<p>这个里面多次手工测试比较难受，太浪费时间了。以前由于一个逻辑牵扯比较多，构造对象比较复杂，仅仅用JUnit写测试的工作量还是太大，所以单元测试一直没有进行下去。<br>后来引入的mockito框架来用于新代码的测试，powermock用于以前的代码测试。下面将介绍一下mockito和powermock框架，就明白为什么要用这两个框架了。</p>
+<hr>
+<h2 id="Mockito"><a href="#Mockito" class="headerlink" title="Mockito"></a>Mockito</h2><p>mockito是用的比较广的mock框架。mock技术的目的和作用是模拟一些在应用中不容易构造或者比较复杂的对象，从而把测试与测试边界以外的对象隔离开。<br>为了说明使用方法，先引入一下基本对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="keyword">int</span> userId;</span><br><span class="line">	<span class="keyword">private</span> ComplexObject complexObject;</span><br><span class="line">    </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getUserId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> userId;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//... construction getter</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">checkUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(user.getUserId() &lt; <span class="number">100</span>)&#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>默认的static import<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.mockito.Mockito.*;</span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Mock"><a href="#Mock" class="headerlink" title="Mock"></a>Mock</h3><p>如果要测试<code>Service#checkUser</code>方法，我们就要构造User对象。假设ComplexObject构造很复杂，如果不用mock，测试将寸步难行。下面来看看mockito是如何构造一个假的User并进行测试的吧。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCheckUser</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	Service service = <span class="keyword">new</span> Service();</span><br><span class="line">	User user = mock(User.class);</span><br><span class="line">	when(user.getUserId()).thenReturn(<span class="number">2</span>);</span><br><span class="line">	<span class="keyword">boolean</span> checkResult = service.checkUser(user);</span><br><span class="line">	assertTrue(checkResult);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面可以看到只用mock方法就可以了，然后设置一下getUserId方法的返回就行了。when的语法理解很容易，就不解释了。<br>上面的when语句也可以换成</p>
+<pre><code>doReturn(2).when(user).getUserId();
+</code></pre><p>在这个例子中，这两种when的写法都是可行的。<br>一共有以下几种方式来模拟一个方法。</p>
+<ul>
+<li>doReturn</li>
+<li>doCallRealMethod</li>
+<li>doNothing</li>
+<li>doThrow</li>
+<li>doAnswer</li>
+</ul>
+<p>当然也有thenXXX这种形式。</p>
+<h3 id="Spy"><a href="#Spy" class="headerlink" title="Spy"></a>Spy</h3><p>spy和mock很像，都是模拟一个对象。但是mock是把所有方法都接管了，spy是默认调用对象的方法。如果先mock出一个对象，然后对每一个方法调用<code>doCallRealMethod</code>，这就相当于spy出一个对象。<br>所以spy和mock只是初始模拟对象的默认设置不一样而已，其他行为都是一样的。</p>
+<h3 id="Annotation"><a href="#Annotation" class="headerlink" title="Annotation"></a>Annotation</h3><p>可以直接用注解来实现mock：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Mock</span></span><br><span class="line">User user;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initMocks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	MockitoAnnotations.initMocks(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="annotation">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCheckUser</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	Service service = <span class="keyword">new</span> Service();</span><br><span class="line">	doReturn(<span class="number">2</span>).when(user).getUserId();</span><br><span class="line">	<span class="keyword">boolean</span> checkResult = service.checkUser(user);</span><br><span class="line">	assertTrue(checkResult);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个需要调用<code>initMocks(this)</code>来注入，这里是通过<code>@Before</code>，也可以通过<code>@RunWith</code>来调用<code>initMocks</code>方法。</p>
+<p>也可以用Spy注解：</p>
+<pre><code>@Spy User user;
+</code></pre><p>还有一个注解比较有用<code>@InjectMocks</code>，这个可以把对象注入到其他对象中去的。<br>下面稍微添加一下代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ComplexObject</span> </span>&#123;</span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"Complex lhcpig"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">handleUser</span><span class="params">(User user)</span></span>&#123;</span><br><span class="line">		<span class="keyword">return</span> user.getComplexObject() + <span class="string">""</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@InjectMocks</span></span><br><span class="line">	User user;</span><br><span class="line">	<span class="annotation">@Spy</span></span><br><span class="line">	ComplexObject complexObject;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Before</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initMocks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		MockitoAnnotations.initMocks(<span class="keyword">this</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHandleUser</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		Service service = <span class="keyword">new</span> Service();</span><br><span class="line">		String s = service.handleUser(user);</span><br><span class="line">		assertThat(s, is(<span class="string">"Complex lhcpig"</span>));</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注1：这里和之前的那个test有冲突，因为User的注解不一样，所以第一个test会报NotAMockException或者MissingMethodInvocationException异常。</li>
+<li>注2：这里用Spy，可以不用额外代码，就CallRealMethod。</li>
+</ul>
+<h3 id="Verify"><a href="#Verify" class="headerlink" title="Verify"></a>Verify</h3><p>这个是用来判断方法是否被调用，调用是否超时，调用了多少次等测试。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCheckUser</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	Service service = <span class="keyword">new</span> Service();</span><br><span class="line">	when(user.getUserId()).thenReturn(<span class="number">2</span>);</span><br><span class="line">	<span class="keyword">boolean</span> checkResult = service.checkUser(user);</span><br><span class="line">	assertTrue(checkResult);</span><br><span class="line">	verify(user).getUserId();</span><br><span class="line">	verify(user, timeout(<span class="number">100</span>)).getUserId();</span><br><span class="line">	user.getUserId();</span><br><span class="line">	verify(user, times(<span class="number">2</span>)).getUserId();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果方法有参数，也可以验证参数。<br>这里只是简介，如果想详细了解Mockito，建议还是看<a href="http://site.mockito.org/mockito/docs/current/org/mockito/Mockito.html" target="_blank" rel="external">官网文档</a>。</p>
+<hr>
+<h2 id="PowerMock"><a href="#PowerMock" class="headerlink" title="PowerMock"></a>PowerMock</h2><p>Mockito不支持final方法，私有方法，静态方法，而PowerMock支持。所以这里也要介绍一下。但是还是不建议项目中使用，如果需要使用PowerMock才能测试，说明代码的可测试性不好，需要改进代码。一般都是历史遗留代码或者第三方库相关测试的时候才需要使用。</p>
+<p>下面是使用方式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@RunWith</span>(PowerMockRunner.class)</span><br><span class="line"><span class="annotation">@PrepareForTest</span>( &#123; YourClassWithEgStaticMethod.class &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">YourTestCase</span> </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>给个例子，大家就理解了<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@RunWith</span>(PowerMockRunner.class)</span><br><span class="line"><span class="annotation">@PrepareForTest</span>( &#123; Service.class &#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Before</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">initMocks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		mockStatic(Service.class);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTestStaticFinal</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		PowerMockito.when(Service.testStaticFinal()).thenReturn(<span class="string">"mock1"</span>);</span><br><span class="line">		assertEquals(<span class="string">"mock1"</span>, Service.testStaticFinal());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPrivate</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		Service t = mock(Service.class);</span><br><span class="line">		PowerMockito.when(t, <span class="string">"testPrivate"</span>).thenReturn(<span class="string">"xxx"</span>);</span><br><span class="line">		doCallRealMethod().when(t).testPrivateForPublic();</span><br><span class="line">		assertEquals(<span class="string">"xxx"</span>, t.testPrivateForPublic());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testTestPrivateWithArg</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">		Service t = spy(<span class="keyword">new</span> Service());</span><br><span class="line">		String arg = <span class="string">"dd"</span>;</span><br><span class="line">		PowerMockito.when(t, <span class="string">"testPrivateWithArg"</span>, arg).thenReturn(<span class="string">"lhc"</span>);</span><br><span class="line">		assertEquals(<span class="string">"lhc"</span>, t.getTestPrivateWithArg(arg));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Service</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String <span class="title">testStaticFinal</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"testStaticFinal"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"static final"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> String <span class="title">testPrivate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"testPrivate"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="string">"private"</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">testPrivateForPublic</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"testPrivateForPublic"</span>);</span><br><span class="line">		<span class="keyword">return</span> testPrivate();</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">private</span> String <span class="title">testPrivateWithArg</span><span class="params">(String arg)</span> </span>&#123;</span><br><span class="line">		System.out.println(<span class="string">"testPrivateWithArg"</span>);</span><br><span class="line">		<span class="keyword">return</span> arg + <span class="string">"x"</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>私有方法用PowerMock测试后，如果要修改名字就会很麻烦，重构起来也可能会影响测试用例。所PowerMock的正确使用方式是尽量不使用。</p>
+<p>因为要反射调用私有方法，所以写法没有mockito那么优雅。我这里使用的是基于Mockito的PowerMock，所以可以混合使用，比如上面用到的spy，when等。当然PowerMock还有基于其他mock框架（EasyMock）的扩展，这里就不再进一步介绍了。</p>
+<p>想让测试更加高效，测试框架还是其次，写出可测试性的代码才是最重要的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://blog.lhcpig.xyz/2015/03/03/单元测试简述/" data-id="cikryd0b30005e8mbwtqjdjtb" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/mock/">mock</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/单元测试/">单元测试</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/07/09/sed命令/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          sed命令
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dairy/">dairy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embstr/">embstr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/">mock</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单元测试/">单元测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/dairy/" style="font-size: 10px;">dairy</a> <a href="/tags/embstr/" style="font-size: 10px;">embstr</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">近期文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/08/29/redis的embstr编码/">redis的embstr编码</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/17/开发日记1/">开发日记1</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/22/两个小工具/">两个小工具</a>
+          </li>
+        
+          <li>
+            <a href="/2015/07/09/sed命令/">sed命令</a>
+          </li>
+        
+          <li>
+            <a href="/2015/03/03/单元测试简述/">单元测试简述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">友情链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://gitcafe.com/lhcpig/lhcpig/tree/gitcafe-pages" target="_blank">gitcafe</a>
+          </li>
+        
+          <li>
+            <a href="https://github.com/lhcpig/lhcpig.github.io" target="_blank">github</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 lhcpig<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"/css/bdshare.css"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+</div>
+</body>
+</html>
