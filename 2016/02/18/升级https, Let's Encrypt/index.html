@@ -6,22 +6,22 @@
   
   <title>升级https, Let&#39;s Encrypt | lhcpig&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##升级的原因
-去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。
-##新证书管理机构–Let’s EncryptLet’s Encryp">
+  <meta name="description" content="一、 升级的原因去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。
+
+二、 新证书管理机构–Let’s EncryptLet’s Encr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="升级https, Let's Encrypt">
 <meta property="og:url" content="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/index.html">
 <meta property="og:site_name" content="lhcpig's blog">
-<meta property="og:description" content="##升级的原因
-去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。
-##新证书管理机构–Let’s EncryptLet’s Encryp">
-<meta property="og:updated_time" content="2016-02-18T10:12:43.253Z">
+<meta property="og:description" content="一、 升级的原因去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。
+
+二、 新证书管理机构–Let’s EncryptLet’s Encr">
+<meta property="og:updated_time" content="2016-02-18T10:22:21.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="升级https, Let's Encrypt">
-<meta name="twitter:description" content="##升级的原因
-去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。
-##新证书管理机构–Let’s EncryptLet’s Encryp">
+<meta name="twitter:description" content="一、 升级的原因去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。
+
+二、 新证书管理机构–Let’s EncryptLet’s Encr">
   
     <link rel="alternative" href="/atom.xml" title="lhcpig&#39;s blog" type="application/atom+xml">
   
@@ -111,14 +111,14 @@
 	    
           <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#letsencrypt-auto替代者"><span class="toc-number">1.</span> <span class="toc-text">letsencrypt-auto替代者</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#一、-升级的原因"><span class="toc-number">1.</span> <span class="toc-text">一、 升级的原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#二、-新证书管理机构–Let’s-Encrypt"><span class="toc-number">2.</span> <span class="toc-text">二、 新证书管理机构–Let’s Encrypt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#三、-申请证书工具letsencrypt-auto"><span class="toc-number">3.</span> <span class="toc-text">三、 申请证书工具letsencrypt-auto</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#四、-letsencrypt-auto替代者"><span class="toc-number">4.</span> <span class="toc-text">四、 letsencrypt-auto替代者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#五、-利用acme-tiny申请证书步骤"><span class="toc-number">5.</span> <span class="toc-text">五、 利用acme-tiny申请证书步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-建立Let’s-Encrypt账户的私钥"><span class="toc-number">5.1.</span> <span class="toc-text">1. 建立Let’s Encrypt账户的私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-生成域名的私钥"><span class="toc-number">5.2.</span> <span class="toc-text">2. 生成域名的私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-新建challenge文件夹"><span class="toc-number">5.3.</span> <span class="toc-text">3. 新建challenge文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-正式开始申请"><span class="toc-number">5.4.</span> <span class="toc-text">4. 正式开始申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-安装证书"><span class="toc-number">5.5.</span> <span class="toc-text">5. 安装证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-定时更新证书"><span class="toc-number">5.6.</span> <span class="toc-text">6. 定时更新证书</span></a></li></ol></li></ol>
           </div>
 		
-		<p>##升级的原因</p>
-<p>去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。</p>
-<p>##新证书管理机构–Let’s Encrypt<br>Let’s Encrypt是去年十二月份开始公测的，可以免费申请证书。其签发的证书已经获得了交叉信任，已经能被所有主流浏览器信任了。交叉签名来自 IdenTrust Root CA。</p>
-<p>##<a href="https://github.com/letsencrypt/letsencrypt" target="_blank" rel="external">letsencrypt-auto</a></p>
-<p>官方提供了自动获取证书的工具<a href="https://github.com/letsencrypt/letsencrypt" target="_blank" rel="external">letsencrypt-auto</a>，只需一条命令，即可获取证书。第一步是下载工具：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/letsencrypt/letsencrypt</span><br></pre></td></tr></table></figure></p>
+		<h2 id="一、-升级的原因"><a href="#一、-升级的原因" class="headerlink" title="一、 升级的原因"></a>一、 升级的原因</h2><p>去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。</p>
+<hr>
+<h2 id="二、-新证书管理机构–Let’s-Encrypt"><a href="#二、-新证书管理机构–Let’s-Encrypt" class="headerlink" title="二、 新证书管理机构–Let’s Encrypt"></a>二、 新证书管理机构–Let’s Encrypt</h2><p>Let’s Encrypt是去年十二月份开始公测的，可以免费申请证书。其签发的证书已经获得了交叉信任，已经能被所有主流浏览器信任了。交叉签名来自 IdenTrust Root CA。</p>
+<hr>
+<h2 id="三、-申请证书工具letsencrypt-auto"><a href="#三、-申请证书工具letsencrypt-auto" class="headerlink" title="三、 申请证书工具letsencrypt-auto"></a>三、 申请证书工具<a href="https://github.com/letsencrypt/letsencrypt" target="_blank" rel="external">letsencrypt-auto</a></h2><p>官方提供了自动获取证书的工具<a href="https://github.com/letsencrypt/letsencrypt" target="_blank" rel="external">letsencrypt-auto</a>，只需一条命令，即可获取证书。第一步是下载工具：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/letsencrypt/letsencrypt</span><br></pre></td></tr></table></figure></p>
 <p>执行命令<code>./letsencrypt-auto</code>即可启动客户端，在执行之前，我们来看看它的用法。<br><code>letsencrypt-auto</code>官方集成了几个插件来帮助我们使用：</p>
 <blockquote>
 <ul>
@@ -130,41 +130,33 @@
 </ul>
 </blockquote>
 <p>所以，如果正在运行apache服务器，可以执行 <code>./letsencrypt-auto --apache -d example.com -d www.example.com -d other.example.net</code>，这个会获取证书，并安装。<br>如果没有web服务器，可以执行： <code>./letsencrypt-auto certonly --standalone  -d example.com</code>。</p>
-<h2 id="letsencrypt-auto替代者"><a href="#letsencrypt-auto替代者" class="headerlink" title="letsencrypt-auto替代者"></a>letsencrypt-auto替代者</h2><p>用过<code>letsencrypt-auto</code>就知道里面有很多坑了。</p>
+<hr>
+<h2 id="四、-letsencrypt-auto替代者"><a href="#四、-letsencrypt-auto替代者" class="headerlink" title="四、 letsencrypt-auto替代者"></a>四、 letsencrypt-auto替代者</h2><p>用过<code>letsencrypt-auto</code>就知道里面有很多坑了。</p>
 <ul>
 <li>我在用的过程中，发现python2.6不支持，python3.5不支持，后来安装python2.7.11才可以运行。</li>
 <li>安装python之前，要安装bz2压缩相关的包，不然执行<code>letsencrypt-auto</code>会报错。</li>
 <li>python的源，我用aliyun的不行，提示有个版本的包找不到，换成豆瓣的才可以<code>http://pypi.douban.com/</code>。</li>
 </ul>
 <p>所以<strong><a href="https://github.com/diafygi/acme-tiny" target="_blank" rel="external">acme-tiny</a></strong>出现了，建议使用这个来代替<code>letsencrypt-auto</code>。</p>
-<p>##利用acme-tiny申请证书步骤</p>
-<p>###1. 建立Let’s Encrypt账户的私钥<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa <span class="number">4096</span> &gt; account.key</span><br></pre></td></tr></table></figure></p>
-<p>###2. 生成域名的私钥<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa 4096 &#62; domain.key&#10;&#10;#&#23545;&#20110;&#21333;&#20010;&#22495;&#21517;&#65292;&#25191;&#34892;&#19979;&#38754;&#36825;&#26465;&#35821;&#21477;&#10;openssl req -new -sha256 -key domain.key -subj &#34;/CN=yoursite.com&#34; &#62; domain.csr&#10;&#10;#&#23545;&#20110;&#22810;&#22495;&#21517;&#65292;&#21487;&#20197;&#25191;&#34892;&#19979;&#38754;&#36825;&#26465;&#35821;&#21477;&#10;openssl req -new -sha256 -key domain.key -subj &#34;/&#34; -reqexts SAN -config &#60;(cat /etc/ssl/openssl.cnf &#60;(printf &#34;[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com&#34;)) &#62; domain.csr</span><br></pre></td></tr></table></figure></p>
-<p>###3. 新建challenge文件夹</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /var/www/challenges/&#10;``` &#10;&#10;&#36825;&#20010;&#25991;&#20214;&#22841;&#21487;&#20197;&#26159;&#20219;&#24847;&#25991;&#20214;&#22841;&#65292;&#35760;&#24471;nginx&#26377;&#26435;&#38480;&#35835;&#21363;&#21487;&#12290;&#37197;&#32622;nginx:</span><br></pre></td></tr></table></figure>
-<p>server {<br>    listen 80;<br>    server_name yoursite.com www.yoursite.com;<br>    location /.well-known/acme-challenge/ {<br>        alias /var/www/challenges/;<br>        try_files $uri =404;<br>    }<br>    …the rest of your config<br>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#39564;&#35777;&#22495;&#21517;&#25152;&#26377;&#32773;&#65292;&#23601;&#26159;&#36890;&#36807;&#22312;`/.well-known/acme-challenge/`&#37324;&#20889;&#25991;&#20214;&#65292;&#28982;&#21518;&#36890;&#36807;&#20844;&#32593;&#26469;&#35775;&#38382;&#65292;&#30475;&#33021;&#19981;&#33021;&#35775;&#38382;&#21040;&#26469;&#21028;&#26029;&#30340;&#12290;&#10;&#10;###4. &#27491;&#24335;&#24320;&#22987;&#30003;&#35831;&#10;`python acme_tiny.py --account-key ./account.key --csr ./domain.csr --acme-dir /var/www/challenges/ &#62; ./signed.crt`&#10;&#25552;&#31034;&#25104;&#21151;&#21518;&#65292;signed.crt&#23601;&#26159;&#35777;&#20070;&#65292;&#23545;&#24212;&#30340;&#31169;&#38053;&#23601;&#26159;domain.key&#12290;&#22914;&#26524;&#35201;&#30003;&#35831;&#22810;&#20010;&#65292;account.key&#21487;&#20197;&#19981;&#29992;&#21464;&#21270;&#65292;&#20854;&#20182;&#37117;&#35201;&#21464;&#12290;&#10;###5. &#23433;&#35013;&#35777;&#20070;&#10;&#23545;&#20110;nginx&#65292;&#36824;&#38656;&#35201;&#39069;&#22806;&#27493;&#39588;&#65306;</span><br></pre></td></tr></table></figure></p>
-<p>wget -O - <a href="https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem" target="_blank" rel="external">https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem</a> &gt; intermediate.pem<br>cat signed.crt intermediate.pem &gt; chained.pem<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;</span><br></pre></td></tr></table></figure></p>
-<p>server {<br>    listen 443;<br>    server_name yoursite.com, www.yoursite.com;</p>
-<pre><code>ssl on;
-ssl_certificate /path/to/chained.pem;
-ssl_certificate_key /path/to/domain.key;
-ssl_session_timeout 5m;
-ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;
-ssl_session_cache shared:SSL:50m;
-ssl_dhparam /path/to/server.dhparam;
-ssl_prefer_server_ciphers on;
-
-...the rest of your config
-</code></pre><p>}<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#10;###6. &#23450;&#26102;&#26356;&#26032;&#35777;&#20070;&#10;&#21487;&#20197;&#36890;&#36807;crontab&#26469;&#23450;&#26102;&#26356;&#26032;&#35777;&#20070;&#12290;&#33050;&#26412;`renew_cert.sh`&#31034;&#20363;&#65306;&#10;&#10;```bash&#10;#!/usr/bin/sh&#10;python /path/to/acme_tiny.py --account-key /path/to/account.key --csr /path/to/domain.csr --acme-dir /var/www/challenges/ &#62; /tmp/signed.crt || exit&#10;wget -O - https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem &#62; intermediate.pem&#10;cat /tmp/signed.crt intermediate.pem &#62; /path/to/chained.pem&#10;service nginx reload</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">#&#27599;&#26376;1&#21495;&#25191;&#34892;&#10;0 0 1 * * /path/to/renew_cert.sh 2&#62;&#62; /var/log/acme_tiny.log</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="五、-利用acme-tiny申请证书步骤"><a href="#五、-利用acme-tiny申请证书步骤" class="headerlink" title="五、 利用acme-tiny申请证书步骤"></a>五、 利用acme-tiny申请证书步骤</h2><h3 id="1-建立Let’s-Encrypt账户的私钥"><a href="#1-建立Let’s-Encrypt账户的私钥" class="headerlink" title="1. 建立Let’s Encrypt账户的私钥"></a>1. 建立Let’s Encrypt账户的私钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa <span class="number">4096</span> &gt; account.key</span><br></pre></td></tr></table></figure>
+<h3 id="2-生成域名的私钥"><a href="#2-生成域名的私钥" class="headerlink" title="2. 生成域名的私钥"></a>2. 生成域名的私钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa <span class="number">4096</span> &gt; domain.key</span><br><span class="line"></span><br><span class="line"><span class="comment">#对于单个域名，执行下面这条语句</span></span><br><span class="line">openssl req -new -sha256 -key domain.key -subj <span class="string">"/CN=yoursite.com"</span> &gt; domain.csr</span><br><span class="line"></span><br><span class="line"><span class="comment">#对于多域名，可以执行下面这条语句</span></span><br><span class="line">openssl req -new -sha256 -key domain.key -subj <span class="string">"/"</span> -reqexts SAN -config &lt;(cat /etc/ssl/openssl.cnf &lt;(<span class="built_in">printf</span> <span class="string">"[SAN]\nsubjectAltName=DNS:yoursite.com,DNS:www.yoursite.com"</span>)) &gt; domain.csr</span><br></pre></td></tr></table></figure>
+<h3 id="3-新建challenge文件夹"><a href="#3-新建challenge文件夹" class="headerlink" title="3. 新建challenge文件夹"></a>3. 新建challenge文件夹</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /var/www/challenges/</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">这个文件夹可以是任意文件夹，记得nginx有权限读即可。配置nginx:</span><br><span class="line"></span><br><span class="line">```json</span><br><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">80</span>;</span><br><span class="line">    server_name yoursite.com www.yoursite.com;</span><br><span class="line">    location /.well-known/acme-challenge/ &#123;</span><br><span class="line">        <span class="built_in">alias</span> /var/www/challenges/;</span><br><span class="line">        try_files <span class="variable">$uri</span> =<span class="number">404</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    ...the rest of your config</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>验证域名所有者，就是通过在<code>/.well-known/acme-challenge/</code>里写文件，然后通过公网来访问，看能不能访问到来判断的。</p>
+<h3 id="4-正式开始申请"><a href="#4-正式开始申请" class="headerlink" title="4. 正式开始申请"></a>4. 正式开始申请</h3><p><code>python acme_tiny.py --account-key ./account.key --csr ./domain.csr --acme-dir /var/www/challenges/ &gt; ./signed.crt</code><br>提示成功后，signed.crt就是证书，对应的私钥就是domain.key。如果要申请多个，account.key可以不用变化，其他都要变。</p>
+<h3 id="5-安装证书"><a href="#5-安装证书" class="headerlink" title="5. 安装证书"></a>5. 安装证书</h3><p>对于nginx，还需要额外步骤：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -O - https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem &gt; intermediate.pem</span><br><span class="line">cat signed.crt intermediate.pem &gt; chained.pem</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">server &#123;&#10;    listen 443;&#10;    server_name yoursite.com, www.yoursite.com;&#10;&#10;    ssl on;&#10;    ssl_certificate /path/to/chained.pem;&#10;    ssl_certificate_key /path/to/domain.key;&#10;    ssl_session_timeout 5m;&#10;    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;&#10;    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:ECDHE-RSA-AES128-SHA:DHE-RSA-AES256-SHA:DHE-RSA-AES128-SHA;&#10;    ssl_session_cache shared:SSL:50m;&#10;    ssl_dhparam /path/to/server.dhparam;&#10;    ssl_prefer_server_ciphers on;&#10;&#10;    ...the rest of your config&#10;&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="6-定时更新证书"><a href="#6-定时更新证书" class="headerlink" title="6. 定时更新证书"></a>6. 定时更新证书</h3><p>可以通过crontab来定时更新证书。脚本<code>renew_cert.sh</code>示例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="shebang">#!/usr/bin/sh</span></span><br><span class="line">python /path/to/acme_tiny.py --account-key /path/to/account.key --csr /path/to/domain.csr --acme-dir /var/www/challenges/ &gt; /tmp/signed.crt || <span class="built_in">exit</span></span><br><span class="line">wget -O - https://letsencrypt.org/certs/lets-encrypt-x1-cross-signed.pem &gt; intermediate.pem</span><br><span class="line">cat /tmp/signed.crt intermediate.pem &gt; /path/to/chained.pem</span><br><span class="line">service nginx reload</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#每月1号执行</span></span><br><span class="line"><span class="number">0</span> <span class="number">0</span> <span class="number">1</span> * * /path/to/renew_cert.sh <span class="number">2</span>&gt;&gt; /var/<span class="built_in">log</span>/acme_tiny.log</span><br></pre></td></tr></table></figure>
 <p>注：更新证书时，要保证步骤3设置不变，即letsencrypt服务器能够访问对应域名下的<code>/.well-known/acme-challenge/</code>文件夹</p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/" data-id="ciks402ln000cz0mbeq8wqxo7" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/" data-id="ciks43ij0000clgmbyfhbn1mg" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
