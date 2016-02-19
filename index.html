@@ -106,12 +106,10 @@
 	    
           <div id="toc" class="toc-article">
             <strong class="toc-title">文章目录</strong>
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#升级的原因"><span class="toc-number">1.</span> <span class="toc-text">升级的原因</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#新证书管理机构–Let’s-Encrypt"><span class="toc-number">2.</span> <span class="toc-text">新证书管理机构–Let’s Encrypt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#申请证书工具letsencrypt-auto"><span class="toc-number">3.</span> <span class="toc-text">申请证书工具letsencrypt-auto</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#letsencrypt-auto替代者"><span class="toc-number">4.</span> <span class="toc-text">letsencrypt-auto替代者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用acme-tiny申请证书步骤"><span class="toc-number">5.</span> <span class="toc-text">利用acme-tiny申请证书步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#建立Let’s-Encrypt账户的私钥"><span class="toc-number">5.1.</span> <span class="toc-text">建立Let’s Encrypt账户的私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成域名的私钥"><span class="toc-number">5.2.</span> <span class="toc-text">生成域名的私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新建challenge文件夹"><span class="toc-number">5.3.</span> <span class="toc-text">新建challenge文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正式开始申请"><span class="toc-number">5.4.</span> <span class="toc-text">正式开始申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装证书"><span class="toc-number">5.5.</span> <span class="toc-text">安装证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定时更新证书"><span class="toc-number">5.6.</span> <span class="toc-text">定时更新证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">6.</span> <span class="toc-text">注意事项</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#新证书管理机构–Let’s-Encrypt"><span class="toc-number">1.</span> <span class="toc-text">新证书管理机构–Let’s Encrypt</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#申请证书工具letsencrypt-auto"><span class="toc-number">2.</span> <span class="toc-text">申请证书工具letsencrypt-auto</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#letsencrypt-auto替代者"><span class="toc-number">3.</span> <span class="toc-text">letsencrypt-auto替代者</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用acme-tiny申请证书步骤"><span class="toc-number">4.</span> <span class="toc-text">利用acme-tiny申请证书步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#建立Let’s-Encrypt账户的私钥"><span class="toc-number">4.1.</span> <span class="toc-text">建立Let’s Encrypt账户的私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生成域名的私钥"><span class="toc-number">4.2.</span> <span class="toc-text">生成域名的私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#新建challenge文件夹"><span class="toc-number">4.3.</span> <span class="toc-text">新建challenge文件夹</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正式开始申请"><span class="toc-number">4.4.</span> <span class="toc-text">正式开始申请</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装证书"><span class="toc-number">4.5.</span> <span class="toc-text">安装证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#定时更新证书"><span class="toc-number">4.6.</span> <span class="toc-text">定时更新证书</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-number">5.</span> <span class="toc-text">注意事项</span></a></li></ol>
           </div>
 		
-		<h2 id="升级的原因"><a href="#升级的原因" class="headerlink" title="升级的原因"></a>升级的原因</h2><p>去年运营商大面积劫持http，我们公司的小网站也未能幸免。当时很多用户投诉，马上升级https还有所顾虑，所以当时简单hack了一下。在html中做多种判断，如果是在div中加广告，就把这个div干掉；如果内嵌到iframe中，就改变url，重新加载。暂时解决了，但是治标不治本，所以最近就进行https的升级。</p>
-<hr>
-<h2 id="新证书管理机构–Let’s-Encrypt"><a href="#新证书管理机构–Let’s-Encrypt" class="headerlink" title="新证书管理机构–Let’s Encrypt"></a>新证书管理机构–Let’s Encrypt</h2><p>Let’s Encrypt是去年十二月份开始公测的，可以免费申请证书。其签发的证书已经获得了交叉信任，已经能被所有主流浏览器信任了。交叉签名来自 IdenTrust Root CA。</p>
+		<h2 id="新证书管理机构–Let’s-Encrypt"><a href="#新证书管理机构–Let’s-Encrypt" class="headerlink" title="新证书管理机构–Let’s Encrypt"></a>新证书管理机构–Let’s Encrypt</h2><p>Let’s Encrypt是去年十二月份开始公测的，可以免费申请证书。其签发的证书已经获得了交叉信任，已经能被所有主流浏览器信任了。交叉签名来自 IdenTrust Root CA。</p>
 <hr>
 <h2 id="申请证书工具letsencrypt-auto"><a href="#申请证书工具letsencrypt-auto" class="headerlink" title="申请证书工具letsencrypt-auto"></a>申请证书工具<a href="https://github.com/letsencrypt/letsencrypt" target="_blank" rel="external">letsencrypt-auto</a></h2><p>官方提供了自动获取证书的工具<a href="https://github.com/letsencrypt/letsencrypt" target="_blank" rel="external">letsencrypt-auto</a>，只需一条命令，即可获取证书。第一步是下载工具：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/letsencrypt/letsencrypt</span><br></pre></td></tr></table></figure></p>
 <p>执行命令<code>./letsencrypt-auto</code>即可启动客户端，在执行之前，我们来看看它的用法。<br><code>letsencrypt-auto</code>官方集成了几个插件来帮助我们使用：</p>
@@ -156,7 +154,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/" data-id="cikt43f79000ccgmbyu5z198c" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/" data-id="ciktafoxv000cy8mb813eoyr4" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -212,7 +210,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/08/29/redis的embstr编码/" data-id="cikt43f7k000pcgmbv0f8wflj" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/08/29/redis的embstr编码/" data-id="ciktafoy6000py8mb0hkojn9b" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -263,7 +261,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/08/17/开发日记1/" data-id="cikt43f6m0000cgmbwfj1sjjs" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/08/17/开发日记1/" data-id="ciktafox70000y8mbgfip64q6" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -325,7 +323,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/07/22/两个小工具/" data-id="cikt43f7d000hcgmbedh8zwek" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/07/22/两个小工具/" data-id="ciktafoy0000hy8mbq9cmo9ho" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -375,7 +373,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/07/09/sed命令/" data-id="cikt43f7h000mcgmb7agmexfk" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/07/09/sed命令/" data-id="ciktafoy3000my8mbhomdlhzg" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -473,7 +471,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/03/03/单元测试简述/" data-id="cikt43f750005cgmbfdgxua6o" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/03/03/单元测试简述/" data-id="ciktafoxq0005y8mbpbya1dfp" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
