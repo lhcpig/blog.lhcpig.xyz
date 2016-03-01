@@ -4,21 +4,21 @@
 <head>
   <meta charset="utf-8">
   
-  <title>搭建私有Docker仓库 | lhcpig&#39;s blog</title>
+  <title>搭建私有Docker仓库，存储到阿里云OSS | lhcpig&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##Docker Registry简介Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：Docker Trusted Registry和Docker Hub。简单理解，第一个是负责存储的，第二个是负责管理镜像的。
-Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docke">
+  <meta name="description" content="Docker Registry简介Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：Docker Trusted Registry和Docker Hub。简单理解，第一个是负责存储的，第二个是负责管理镜像的。
+Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="搭建私有Docker仓库">
+<meta property="og:title" content="搭建私有Docker仓库，存储到阿里云OSS">
 <meta property="og:url" content="http://blog.lhcpig.xyz/2016/02/24/搭建私有Docker仓库/index.html">
 <meta property="og:site_name" content="lhcpig's blog">
-<meta property="og:description" content="##Docker Registry简介Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：Docker Trusted Registry和Docker Hub。简单理解，第一个是负责存储的，第二个是负责管理镜像的。
-Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docke">
-<meta property="og:updated_time" content="2016-02-24T08:06:32.011Z">
+<meta property="og:description" content="Docker Registry简介Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：Docker Trusted Registry和Docker Hub。简单理解，第一个是负责存储的，第二个是负责管理镜像的。
+Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docker">
+<meta property="og:updated_time" content="2016-03-01T07:01:31.939Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="搭建私有Docker仓库">
-<meta name="twitter:description" content="##Docker Registry简介Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：Docker Trusted Registry和Docker Hub。简单理解，第一个是负责存储的，第二个是负责管理镜像的。
-Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docke">
+<meta name="twitter:title" content="搭建私有Docker仓库，存储到阿里云OSS">
+<meta name="twitter:description" content="Docker Registry简介Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：Docker Trusted Registry和Docker Hub。简单理解，第一个是负责存储的，第二个是负责管理镜像的。
+Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docker">
   
     <link rel="alternative" href="/atom.xml" title="lhcpig&#39;s blog" type="application/atom+xml">
   
@@ -97,7 +97,7 @@ Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Doc
         
   
     <h1 class="article-title" itemprop="name">
-      搭建私有Docker仓库
+      搭建私有Docker仓库，存储到阿里云OSS
     </h1>
   
 
@@ -106,25 +106,29 @@ Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Doc
     <div class="article-entry" itemprop="articleBody">
       
 	    
-		<p>##<a href="https://www.docker.com/products/docker-registry" target="_blank" rel="external">Docker Registry</a>简介<br>Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：<a href="https://www.docker.com/products/docker-trusted-registry" target="_blank" rel="external">Docker Trusted Registry</a>和<a href="https://www.docker.com/products/docker-registry" target="_blank" rel="external">Docker Hub</a>。简单理解，第一个是负责存储的，第二个是负责管理镜像的。</p>
+          <div id="toc" class="toc-article">
+            <strong class="toc-title">文章目录</strong>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Docker-Registry简介"><span class="toc-number">1.</span> <span class="toc-text">Docker Registry简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装使用Docker-Registry"><span class="toc-number">2.</span> <span class="toc-text">安装使用Docker Registry</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载Docker-Registry的镜像"><span class="toc-number">2.1.</span> <span class="toc-text">下载Docker Registry的镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动Docker-Registry"><span class="toc-number">2.2.</span> <span class="toc-text">启动Docker Registry</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#镜像文件存储本地"><span class="toc-number">2.3.</span> <span class="toc-text">镜像文件存储本地</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用https"><span class="toc-number">2.4.</span> <span class="toc-text">使用https</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#添加权限认证"><span class="toc-number">2.5.</span> <span class="toc-text">添加权限认证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用阿里云的OSS保存镜像文件"><span class="toc-number">3.</span> <span class="toc-text">使用阿里云的OSS保存镜像文件</span></a></li></ol>
+          </div>
+		
+		<h2 id="Docker-Registry简介"><a href="#Docker-Registry简介" class="headerlink" title="Docker Registry简介"></a><a href="https://www.docker.com/products/docker-registry" target="_blank" rel="external">Docker Registry</a>简介</h2><p>Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：<a href="https://www.docker.com/products/docker-trusted-registry" target="_blank" rel="external">Docker Trusted Registry</a>和<a href="https://www.docker.com/products/docker-registry" target="_blank" rel="external">Docker Hub</a>。简单理解，第一个是负责存储的，第二个是负责管理镜像的。</p>
 <p>Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docker Index获取镜像信息，然后去保存镜像的Registry里面下载。</p>
 <p>用过Docker的都知道，每次pull镜像时都很慢。后来国内出现了一些加速下载的，可是只是加速了镜像文件的下载。还是需要去连接官方的index服务，这一步很慢，而且还可能失败。</p>
 <p>再往后，国内也提供index服务的加速了，但这样我们就需要完全信任他们了，因为我们完全不用连接官方的服务器了。如果我们不信任他们，或者我们有自己的私有镜像，不想发到公网去，我们就可以用Docker官方推荐的Docker Registry了。</p>
 <hr>
-<p>##安装使用Docker Registry</p>
-<p>###下载Docker Registry的镜像<br>官方提供了Docker Registry的镜像文件，我们只需执行<code>docker pull registry</code>就可以了。今天（206.02.24）lastest标签的registry是版本<code>0.9.1</code>，所以如果我们要用最新版本<code>2.3</code>，可以拉取tag为<code>2</code>,<code>2.3</code>,<code>2.3.0</code>的都可以。执行如下命令即可：</p>
+<h2 id="安装使用Docker-Registry"><a href="#安装使用Docker-Registry" class="headerlink" title="安装使用Docker Registry"></a>安装使用Docker Registry</h2><h3 id="下载Docker-Registry的镜像"><a href="#下载Docker-Registry的镜像" class="headerlink" title="下载Docker Registry的镜像"></a>下载Docker Registry的镜像</h3><p>官方提供了Docker Registry的镜像文件，我们只需执行<code>docker pull registry</code>就可以了。今天（206.02.24）lastest标签的registry是版本<code>0.9.1</code>，所以如果我们要用最新版本<code>2.3</code>，可以拉取tag为<code>2</code>,<code>2.3</code>,<code>2.3.0</code>的都可以。执行如下命令即可：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull registry:2</span><br></pre></td></tr></table></figure>
-<p>###启动Docker Registry<br>启动：</p>
+<h3 id="启动Docker-Registry"><a href="#启动Docker-Registry" class="headerlink" title="启动Docker Registry"></a>启动Docker Registry</h3><p>启动：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry registry:2</span><br></pre></td></tr></table></figure>
 <p>下载镜像，并把它上传到自己的registry：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull busybox &#38;&#38; docker tag busybox localhost/busybox&#10;docker push localhost/busybox</span><br></pre></td></tr></table></figure>
 <p>这样localhost/busybox就在自己的registry中了，下次可以直接pull下来</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull localhost/busybox</span><br></pre></td></tr></table></figure>
-<p>###镜像文件存储本地<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/data:/var/lib/registry \&#10;  registry:2</span><br></pre></td></tr></table></figure></p>
-<p>###使用https<br><a href="https://segmentfault.com/a/1190000004457037" target="_blank" rel="external">上一篇文章介绍了如何获取证书</a>，新建一个目录config，将证书chained.pem和密钥domain.key拷贝到目录config里面，然后执行：</p>
+<h3 id="镜像文件存储本地"><a href="#镜像文件存储本地" class="headerlink" title="镜像文件存储本地"></a>镜像文件存储本地</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/data:/var/lib/registry \&#10;  registry:2</span><br></pre></td></tr></table></figure>
+<h3 id="使用https"><a href="#使用https" class="headerlink" title="使用https"></a>使用https</h3><p><a href="https://segmentfault.com/a/1190000004457037" target="_blank" rel="external">上一篇文章介绍了如何获取证书</a>，新建一个目录config，将证书chained.pem和密钥domain.key拷贝到目录config里面，然后执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/config:/config \&#10;  -e REGISTRY_HTTP_TLS_CERTIFICATE=/config/chained.pem \&#10;  -e REGISTRY_HTTP_TLS_KEY=/config/domain.key \&#10;  registry:2</span><br></pre></td></tr></table></figure>
 <p>下次对镜像进行操作时，可以把localhost改为这个证书对应的域名了。证书有的是crt结尾了，没关系，把<code>chained.pem</code>改为你想要的名字就可以了。</p>
-<p>###添加权限认证<br>按照之前的步骤，任何人都可以push和pull这个仓库中的镜像。如果443端口暴露在外网中，最好加个权限认证。<code>testuser</code>和<code>testpassword</code>分别为用户名和密码，可以修改为你想要的，然后执行：</p>
+<h3 id="添加权限认证"><a href="#添加权限认证" class="headerlink" title="添加权限认证"></a>添加权限认证</h3><p>按照之前的步骤，任何人都可以push和pull这个仓库中的镜像。如果443端口暴露在外网中，最好加个权限认证。<code>testuser</code>和<code>testpassword</code>分别为用户名和密码，可以修改为你想要的，然后执行：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htpasswd -Bbn testuser testpassword &#62; config/htpasswd</span><br></pre></td></tr></table></figure>
 <p>如果本地没有安装htpasswd，也可以在启动了registry后执行如下命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec registry htpasswd -Bbn testuser testpassword &#62; config/htpasswd</span><br></pre></td></tr></table></figure>
@@ -132,7 +136,7 @@ Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Doc
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/config:/config \&#10;  -e &#34;REGISTRY_AUTH=htpasswd&#34; \&#10;  -e &#34;REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm&#34; \&#10;  -e REGISTRY_AUTH_HTPASSWD_PATH=/config/htpasswd \&#10;  -e REGISTRY_HTTP_TLS_CERTIFICATE=/config/chained.pem \&#10;  -e REGISTRY_HTTP_TLS_KEY=/config/domain.key \&#10;  registry:2</span><br></pre></td></tr></table></figure>
 <p>这样，访问registry就需要先login，<code>docker login myregistrydomain.com</code>，按提示输入用户名和密码即可。</p>
 <hr>
-<p>##使用阿里云的OSS保存镜像文件<br>默认镜像文件存到本地磁盘，这个可扩展性不是很好，我们可以把镜像文件存到OSS中。这个使用起来也很简单，因为官方registry中已经包含了OSS的驱动了。只需修改启动命令即可：</p>
+<h2 id="使用阿里云的OSS保存镜像文件"><a href="#使用阿里云的OSS保存镜像文件" class="headerlink" title="使用阿里云的OSS保存镜像文件"></a>使用阿里云的OSS保存镜像文件</h2><p>默认镜像文件存到本地磁盘，这个可扩展性不是很好，我们可以把镜像文件存到OSS中。这个使用起来也很简单，因为官方registry中已经包含了OSS的驱动了。只需修改启动命令即可：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/config:/config \&#10;  -e &#34;REGISTRY_AUTH=htpasswd&#34; \&#10;  -e &#34;REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm&#34; \&#10;  -e REGISTRY_AUTH_HTPASSWD_PATH=/config/htpasswd \&#10;  -e REGISTRY_HTTP_TLS_CERTIFICATE=/config/chained.pem \&#10;  -e REGISTRY_HTTP_TLS_KEY=/config/domain.key \&#10;  -e REGISTRY_STORAGE=oss \&#10;  -e REGISTRY_STORAGE_OSS_ACCESSKEYID=********** \&#10;  -e REGISTRY_STORAGE_OSS_ACCESSKEYSECRET=***************** \&#10;  -e REGISTRY_STORAGE_OSS_REGION=oss-cn-qingdao \&#10;  -e REGISTRY_STORAGE_OSS_BUCKET=******* \&#10;  registry:2</span><br></pre></td></tr></table></figure>
 <p>将上面命令中的<code>***</code>替换成自己的，<code>REGISTRY_STORAGE_OSS_REGION</code>的值也要替换成自己oss所在的地区，如果是青岛就是<code>oss-cn-qingdao</code>。</p>
 <p>注： </p>
@@ -145,7 +149,7 @@ Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Doc
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2016/02/24/搭建私有Docker仓库/" data-id="cil92dur00000ucmbigln2wxe" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2016/02/24/搭建私有Docker仓库/" data-id="cil92gj0l0000skmbi1htnp93" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -210,7 +214,7 @@ Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Doc
       <ul>
         
           <li>
-            <a href="/2016/02/24/搭建私有Docker仓库/">搭建私有Docker仓库</a>
+            <a href="/2016/02/24/搭建私有Docker仓库/">搭建私有Docker仓库，存储到阿里云OSS</a>
           </li>
         
           <li>
