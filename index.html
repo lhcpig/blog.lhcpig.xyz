@@ -81,6 +81,83 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-搭建私有Docker仓库" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/02/24/搭建私有Docker仓库/" class="article-date">
+  <time datetime="2016-02-24T06:06:00.000Z" itemprop="datePublished">2016-02-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/02/24/搭建私有Docker仓库/">搭建私有Docker仓库</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+	    
+		<p>##<a href="https://www.docker.com/products/docker-registry" target="_blank" rel="external">Docker Registry</a>简介<br>Docker Registry是开源的软件，可以进行存储和分发Docker镜像。Docker Registry包括两个关键组成部分：<a href="https://www.docker.com/products/docker-trusted-registry" target="_blank" rel="external">Docker Trusted Registry</a>和<a href="https://www.docker.com/products/docker-registry" target="_blank" rel="external">Docker Hub</a>。简单理解，第一个是负责存储的，第二个是负责管理镜像的。</p>
+<p>Docker Hub以前叫作Docker Index，Docker每次pull镜像时，都是先去Docker Index获取镜像信息，然后去保存镜像的Registry里面下载。</p>
+<p>用过Docker的都知道，每次pull镜像时都很慢。后来国内出现了一些加速下载的，可是只是加速了镜像文件的下载。还是需要去连接官方的index服务，这一步很慢，而且还可能失败。</p>
+<p>再往后，国内也提供index服务的加速了，但这样我们就需要完全信任他们了，因为我们完全不用连接官方的服务器了。如果我们不信任他们，或者我们有自己的私有镜像，不想发到公网去，我们就可以用Docker官方推荐的Docker Registry了。</p>
+<hr>
+<p>##安装使用Docker Registry</p>
+<p>###下载Docker Registry的镜像<br>官方提供了Docker Registry的镜像文件，我们只需执行<code>docker pull registry</code>就可以了。今天（206.02.24）lastest标签的registry是版本<code>0.9.1</code>，所以如果我们要用最新版本<code>2.3</code>，可以拉取tag为<code>2</code>,<code>2.3</code>,<code>2.3.0</code>的都可以。执行如下命令即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull registry:2</span><br></pre></td></tr></table></figure>
+<p>###启动Docker Registry<br>启动：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry registry:2</span><br></pre></td></tr></table></figure>
+<p>下载镜像，并把它上传到自己的registry：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull busybox &#38;&#38; docker tag busybox localhost/busybox&#10;docker push localhost/busybox</span><br></pre></td></tr></table></figure>
+<p>这样localhost/busybox就在自己的registry中了，下次可以直接pull下来</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull localhost/busybox</span><br></pre></td></tr></table></figure>
+<p>###镜像文件存储本地<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/data:/var/lib/registry \&#10;  registry:2</span><br></pre></td></tr></table></figure></p>
+<p>###使用https<br><a href="https://segmentfault.com/a/1190000004457037" target="_blank" rel="external">上一篇文章介绍了如何获取证书</a>，新建一个目录config，将证书chained.pem和密钥domain.key拷贝到目录config里面，然后执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/config:/config \&#10;  -e REGISTRY_HTTP_TLS_CERTIFICATE=/config/chained.pem \&#10;  -e REGISTRY_HTTP_TLS_KEY=/config/domain.key \&#10;  registry:2</span><br></pre></td></tr></table></figure>
+<p>下次对镜像进行操作时，可以把localhost改为这个证书对应的域名了。证书有的是crt结尾了，没关系，把<code>chained.pem</code>改为你想要的名字就可以了。</p>
+<p>###添加权限认证<br>按照之前的步骤，任何人都可以push和pull这个仓库中的镜像。如果443端口暴露在外网中，最好加个权限认证。<code>testuser</code>和<code>testpassword</code>分别为用户名和密码，可以修改为你想要的，然后执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">htpasswd -Bbn testuser testpassword &#62; config/htpasswd</span><br></pre></td></tr></table></figure>
+<p>如果本地没有安装htpasswd，也可以在启动了registry后执行如下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec registry htpasswd -Bbn testuser testpassword &#62; config/htpasswd</span><br></pre></td></tr></table></figure>
+<p>然后再执行启动命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/config:/config \&#10;  -e &#34;REGISTRY_AUTH=htpasswd&#34; \&#10;  -e &#34;REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm&#34; \&#10;  -e REGISTRY_AUTH_HTPASSWD_PATH=/config/htpasswd \&#10;  -e REGISTRY_HTTP_TLS_CERTIFICATE=/config/chained.pem \&#10;  -e REGISTRY_HTTP_TLS_KEY=/config/domain.key \&#10;  registry:2</span><br></pre></td></tr></table></figure>
+<p>这样，访问registry就需要先login，<code>docker login myregistrydomain.com</code>，按提示输入用户名和密码即可。</p>
+<hr>
+<p>##使用阿里云的OSS保存镜像文件<br>默认镜像文件存到本地磁盘，这个可扩展性不是很好，我们可以把镜像文件存到OSS中。这个使用起来也很简单，因为官方registry中已经包含了OSS的驱动了。只需修改启动命令即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 443:5000 --restart=always --name registry \&#10;  -v `pwd`/config:/config \&#10;  -e &#34;REGISTRY_AUTH=htpasswd&#34; \&#10;  -e &#34;REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm&#34; \&#10;  -e REGISTRY_AUTH_HTPASSWD_PATH=/config/htpasswd \&#10;  -e REGISTRY_HTTP_TLS_CERTIFICATE=/config/chained.pem \&#10;  -e REGISTRY_HTTP_TLS_KEY=/config/domain.key \&#10;  -e REGISTRY_STORAGE=oss \&#10;  -e REGISTRY_STORAGE_OSS_ACCESSKEYID=********** \&#10;  -e REGISTRY_STORAGE_OSS_ACCESSKEYSECRET=***************** \&#10;  -e REGISTRY_STORAGE_OSS_REGION=oss-cn-qingdao \&#10;  -e REGISTRY_STORAGE_OSS_BUCKET=******* \&#10;  registry:2</span><br></pre></td></tr></table></figure>
+<p>将上面命令中的<code>***</code>替换成自己的，<code>REGISTRY_STORAGE_OSS_REGION</code>的值也要替换成自己oss所在的地区，如果是青岛就是<code>oss-cn-qingdao</code>。</p>
+<p>注： </p>
+<ul>
+<li>region查询<a href="https://help.aliyun.com/document_detail/oss/user_guide/oss_concept/endpoint.html" target="_blank" rel="external">网址</a></li>
+<li>阿里云OSS的其他参数查询<a href="https://docs.docker.com/registry/storage-drivers/oss/" target="_blank" rel="external">网址</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://blog.lhcpig.xyz/2016/02/24/搭建私有Docker仓库/" data-id="cil92dur00000ucmbigln2wxe" class="article-share-link" data-share="baidu">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/registry/">registry</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-升级https, Let&#39;s Encrypt" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2016/02/18/升级https, Let's Encrypt/" class="article-date">
@@ -154,7 +231,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/" data-id="ciktafoxv000cy8mb813eoyr4" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2016/02/18/升级https, Let's Encrypt/" data-id="cil92durp000hucmb6uljoaue" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -210,7 +287,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/08/29/redis的embstr编码/" data-id="ciktafoy6000py8mb0hkojn9b" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/08/29/redis的embstr编码/" data-id="cil92dus0000uucmbmbwv4zrc" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -261,7 +338,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/08/17/开发日记1/" data-id="ciktafox70000y8mbgfip64q6" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/08/17/开发日记1/" data-id="cil92durh0005ucmblrwlpc00" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -323,7 +400,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/07/22/两个小工具/" data-id="ciktafoy0000hy8mbq9cmo9ho" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/07/22/两个小工具/" data-id="cil92durt000mucmblnfmjlr5" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -373,7 +450,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/07/09/sed命令/" data-id="ciktafoy3000my8mbhomdlhzg" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/07/09/sed命令/" data-id="cil92durx000rucmbda9kk4m5" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -471,7 +548,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://blog.lhcpig.xyz/2015/03/03/单元测试简述/" data-id="ciktafoxq0005y8mbpbya1dfp" class="article-share-link" data-share="baidu">分享到</a>
+        <a data-url="http://blog.lhcpig.xyz/2015/03/03/单元测试简述/" data-id="cil92durl000aucmbs3dkcn5b" class="article-share-link" data-share="baidu">分享到</a>
       
 
       
@@ -497,7 +574,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dairy/">dairy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embstr/">embstr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/letsencrypt/">letsencrypt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/">mock</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单元测试/">单元测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/dairy/">dairy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/embstr/">embstr</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/letsencrypt/">letsencrypt</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mock/">mock</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/registry/">registry</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tool/">tool</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/单元测试/">单元测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -506,7 +583,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/dairy/" style="font-size: 10px;">dairy</a> <a href="/tags/embstr/" style="font-size: 10px;">embstr</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/letsencrypt/" style="font-size: 10px;">letsencrypt</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a>
+      <a href="/tags/dairy/" style="font-size: 10px;">dairy</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/embstr/" style="font-size: 10px;">embstr</a> <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/github/" style="font-size: 10px;">github</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/letsencrypt/" style="font-size: 10px;">letsencrypt</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/mock/" style="font-size: 10px;">mock</a> <a href="/tags/redis/" style="font-size: 10px;">redis</a> <a href="/tags/registry/" style="font-size: 10px;">registry</a> <a href="/tags/tool/" style="font-size: 10px;">tool</a> <a href="/tags/单元测试/" style="font-size: 10px;">单元测试</a> <a href="/tags/编程/" style="font-size: 10px;">编程</a>
     </div>
   </div>
 
@@ -515,7 +592,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/02/">二月 2016</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/07/">七月 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">三月 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -525,6 +602,10 @@
     <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2016/02/24/搭建私有Docker仓库/">搭建私有Docker仓库</a>
+          </li>
         
           <li>
             <a href="/2016/02/18/升级https, Let's Encrypt/">升级https, Let&#39;s Encrypt</a>
@@ -540,10 +621,6 @@
         
           <li>
             <a href="/2015/07/22/两个小工具/">两个小工具</a>
-          </li>
-        
-          <li>
-            <a href="/2015/07/09/sed命令/">sed命令</a>
           </li>
         
       </ul>
